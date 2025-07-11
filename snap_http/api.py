@@ -561,8 +561,6 @@ def monitor_validation_set(account_id: str, validation_set_name: str, validation
     return http.post(f"/validation-sets/{account_id}/{validation_set_name}", body=body)
 
 
-
-
 # System: Get and perform action with recovery system
 def get_recovery_systems() -> SnapdResponse:
     """
@@ -570,6 +568,7 @@ def get_recovery_systems() -> SnapdResponse:
     :return: A SnapdResponse containing the response from the snapd API.
     """
     return http.get("/systems")
+
 
 def perform_system_action(action: str, mode: str)-> SnapdResponse:
     """
@@ -584,6 +583,7 @@ def perform_system_action(action: str, mode: str)-> SnapdResponse:
     }
     return http.post("/systems", body=body)
 
+
 def perform_recovery_action(label: str, action: str, mode: str)-> SnapdResponse:
     """
     Attempt to perform an action with the current active recovery system.
@@ -597,7 +597,6 @@ def perform_recovery_action(label: str, action: str, mode: str)-> SnapdResponse:
         "mode": mode
     }
     return http.post(f"/systems/{label}", body=body)
-
 
 
 # Assertions: list and add assertions
