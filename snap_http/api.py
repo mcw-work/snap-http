@@ -455,6 +455,7 @@ def get_model() -> SnapdResponse:
     """
     return http.get("/model")
 
+
 def remodel(new_model_assertion: str, offline: bool = False) -> SnapdResponse:
     """
     Replace the current model assertion of system
@@ -475,6 +476,7 @@ def get_validation_sets() -> SnapdResponse:
     """
     return http.get("/validation-sets")
 
+
 def get_validation_set(account_id: str, validation_set_name: str) -> SnapdResponse:
     """
     GET specific validation set
@@ -483,6 +485,7 @@ def get_validation_set(account_id: str, validation_set_name: str) -> SnapdRespon
     :return: A SnapdResponse containing the response from the snapd API.
     """
     return http.get(f"/validation-sets/{account_id}/{validation_set_name}")
+
 
 def refresh_validation_set(account_id: str, validation_set_name: str, validation_set_sequence: Optional[int]) -> SnapdResponse:
     """
@@ -493,7 +496,7 @@ def refresh_validation_set(account_id: str, validation_set_name: str, validation
     :return: A SnapdResponse containing the response from the snapd API.
     """
     validation_set_str = f"{account_id}/{validation_set_name}"
-    if validation_set_sequence:
+    if validation_set_sequence is not None:
         validation_set_str += f"={validation_set_sequence}"
 
     body = {
@@ -503,6 +506,62 @@ def refresh_validation_set(account_id: str, validation_set_name: str, validation
         ],
     }
     return http.post("/snaps", body=body)
+
+
+def forget_validation_set(account_id: str, validation_set_name: str, validation_set_sequence: Optional[int] = None) -> SnapdResponse:
+    """
+    Forget a validation set of system
+    :param account_id:  Identifier for the developer account (creator of the validation-set).
+    :param validation_set_name: Name of the validation set.
+    :return: A SnapdResponse containing the response from the snapd API.
+    """
+    body = {
+        "action": "forget"
+    }
+
+    if validation_set_sequence is not None:
+        body["sequence"] = validation_set_sequence
+
+    return http.post(f"/validation-sets/{account_id}/{validation_set_name}", body=body)
+
+
+def enforce_validation_set(account_id: str, validation_set_name: str, validation_set_sequence: Optional[int] = None) -> SnapdResponse:
+    """
+    Enforce a validation set of system
+    :param account_id:  Identifier for the developer account (creator of the validation-set).
+    :param validation_set_name: Name of the validation set.
+    :return: A SnapdResponse containing the response from the snapd API.
+    """
+    body = {
+        "action": "apply",
+        "mode": "enforce"
+        }
+    
+    if validation_set_sequence is not None:
+        body["sequence"] = validation_set_sequence
+        
+    return http.post(f"/validation-sets/{account_id}/{validation_set_name}", body=body)
+
+
+def monitor_validation_set(account_id: str, validation_set_name: str, validation_set_sequence: Optional[int] = None) -> SnapdResponse:
+    """
+    Apply a validation set of system
+    :param account_id:  Identifier for the developer account (creator of the validation-set).
+    :param validation_set_name: Name of the validation set.
+    :return: A SnapdResponse containing the response from the snapd API.
+    """
+    body = {
+        "action": "apply",
+        "mode": "monitor"
+    }
+
+    if validation_set_sequence is not None:
+        body["sequence"] = validation_set_sequence
+
+    return http.post(f"/validation-sets/{account_id}/{validation_set_name}", body=body)
+
+
+
 
 # System: Get and perform action with recovery system
 def get_recovery_systems() -> SnapdResponse:
