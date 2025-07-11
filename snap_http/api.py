@@ -515,7 +515,8 @@ def forget_validation_set(account_id: str, validation_set_name: str, validation_
     :param validation_set_name: Name of the validation set.
     :return: A SnapdResponse containing the response from the snapd API.
     """
-    body = {
+    
+    body : Dict[str, Union[str, int]] = {
         "action": "forget"
     }
 
@@ -532,7 +533,7 @@ def enforce_validation_set(account_id: str, validation_set_name: str, validation
     :param validation_set_name: Name of the validation set.
     :return: A SnapdResponse containing the response from the snapd API.
     """
-    body = {
+    body : Dict[str, Union[str, int]] = {
         "action": "apply",
         "mode": "enforce"
         }
@@ -550,7 +551,7 @@ def monitor_validation_set(account_id: str, validation_set_name: str, validation
     :param validation_set_name: Name of the validation set.
     :return: A SnapdResponse containing the response from the snapd API.
     """
-    body = {
+    body : Dict[str, Union[str, int]] = {
         "action": "apply",
         "mode": "monitor"
     }
